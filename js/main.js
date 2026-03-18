@@ -15,10 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Делегирование событий на кнопки внутри карточек
     document.addEventListener('click', (e) => {
+        // Обработка детальной карточки
         if (e.target.closest('.details-btn')) {
             const id = parseInt(e.target.closest('.details-btn').dataset.id);
             showCarDetail(id);
         }
+        
+        // Обработка избранного
         if (e.target.closest('.favorite-btn')) {
             const btn = e.target.closest('.favorite-btn');
             const id = parseInt(btn.dataset.id);
@@ -28,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
             saveFavorites();
             btn.classList.toggle('active');
         }
+        
+        // Обработка сравнения
         if (e.target.closest('.compare-btn')) {
             const btn = e.target.closest('.compare-btn');
             const id = parseInt(btn.dataset.id);
@@ -47,6 +52,25 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = parseInt(articleCard.dataset.id);
             openArticle(id);
         }
+        
+        // Обработка динамических навигационных ссылок (например, в пустом состоянии сравнения)
+        if (e.target.closest('.nav-link')) {
+            e.preventDefault();
+            const link = e.target.closest('.nav-link');
+            const page = link.dataset.page;
+            if (page) {
+                showPage(page);
+                
+                // Дополнительные действия при переходе
+                if (page === 'profile') loadProfileTab('favorites');
+                if (page === 'compare') renderCompare();
+                if (page === 'catalog') {
+                    loadFilterOptions();
+                    applyCatalogFilters();
+                }
+                if (page === 'journal') renderJournal();
+            }
+        }
     });
 
     // Закрытие модального окна
@@ -57,6 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Обработчик сохранения настроек
+    document.getElementById('profileSettingsForm')?.querySelector('button')?.addEventListener('click', () => {
+        alert('Настройки сохранены (демо-режим)');
+    });
+    
     // Показываем главную страницу по умолчанию
     showPage('home');
 });

@@ -159,26 +159,93 @@
 
         <!-- Личный кабинет -->
         <section id="profile" class="page">
-            <h1>Личный кабинет</h1>
-            <div class="profile-tabs">
-                <button class="tab-btn active" data-tab="favorites">Избранное</button>
-                <button class="tab-btn" data-tab="history">История просмотров</button>
-                <button class="tab-btn" data-tab="myads">Мои объявления</button>
-                <button class="tab-btn" data-tab="settings">Настройки</button>
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h2>Герман Т.В.</h2>
+                    <p>
+                        <i class="fa-regular fa-envelope"></i> shift_by@gmail.ru
+                        <span style="margin: 0 0.5rem;">•</span>
+                        <i class="fa-solid fa-phone"></i> +375 (29) 123-45-67
+                    </p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="favoritesCount">0</div>
+                            <div class="stat-label">В избранном</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="historyCount">0</div>
+                            <div class="stat-label">Просмотрено</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="myadsCount">0</div>
+                            <div class="stat-label">Объявлений</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="tab-content" id="favoritesTab">
-                <h3>Избранные автомобили</h3>
-                <div class="cars-grid" id="favoritesList"></div>
+
+            <div class="profile-tabs-modern">
+                <button class="tab-btn-modern active" data-tab="favorites">
+                    <i class="fa-regular fa-heart"></i> Избранное
+                </button>
+                <button class="tab-btn-modern" data-tab="history">
+                    <i class="fa-regular fa-clock"></i> История просмотров
+                </button>
+                <button class="tab-btn-modern" data-tab="myads">
+                    <i class="fa-regular fa-rectangle-ad"></i> Мои объявления
+                </button>
+                <button class="tab-btn-modern" data-tab="settings">
+                    <i class="fa-solid fa-gear"></i> Настройки
+                </button>
             </div>
-            <div class="tab-content" id="historyTab" style="display:none;">
-                <h3>История просмотров</h3>
-                <div class="cars-grid" id="historyList"></div>
-            </div>
-            <div class="tab-content" id="myadsTab" style="display:none;">
-                <p>У вас пока нет активных объявлений.</p>
-            </div>
-            <div class="tab-content" id="settingsTab" style="display:none;">
-                <p>Настройки профиля (имя, телефон, email).</p>
+
+            <div class="profile-content" id="profileContent">
+                <!-- Избранное -->
+                <div id="favoritesTab" class="profile-tab-content" style="display: block;">
+                    <h3><i class="fa-regular fa-heart" style="color: var(--primary);"></i> Избранные автомобили</h3>
+                    <div class="profile-cars-grid" id="favoritesList"></div>
+                </div>
+
+                <!-- История просмотров -->
+                <div id="historyTab" class="profile-tab-content" style="display: none;">
+                    <h3><i class="fa-regular fa-clock" style="color: var(--primary);"></i> История просмотров</h3>
+                    <div class="profile-cars-grid" id="historyList"></div>
+                </div>
+
+                <!-- Мои объявления -->
+                <div id="myadsTab" class="profile-tab-content" style="display: none;">
+                    <h3><i class="fa-regular fa-rectangle-ad" style="color: var(--primary);"></i> Мои объявления</h3>
+                    <div id="myadsList" class="myads-list"></div>
+                </div>
+
+                <!-- Настройки -->
+                <div id="settingsTab" class="profile-tab-content" style="display: none;">
+                    <h3><i class="fa-solid fa-gear" style="color: var(--primary);"></i> Настройки профиля</h3>
+                    <form class="settings-form" id="profileSettingsForm">
+                        <div class="settings-group">
+                            <label>Имя</label>
+                            <input type="text" class="settings-input" value="Герман Т.В.">
+                        </div>
+                        <div class="settings-group">
+                            <label>Email</label>
+                            <input type="email" class="settings-input" value="shift_by@gmail.ru">
+                        </div>
+                        <div class="settings-group">
+                            <label>Телефон</label>
+                            <input type="tel" class="settings-input" value="+375 (29) 123-45-67">
+                        </div>
+                        <div class="settings-group">
+                            <label>Дата регистрации</label>
+                            <input type="text" class="settings-input" value="15.02.2026" readonly>
+                        </div>
+                        <button type="button" class="btn-save">
+                            <i class="fa-regular fa-floppy-disk"></i> Сохранить изменения
+                        </button>
+                    </form>
+                </div>
             </div>
         </section>
 
@@ -190,7 +257,19 @@
 
         <!-- Сравнение -->
         <section id="compare" class="page">
-            <h1>Сравнение автомобилей</h1>
+            <div class="compare-header">
+                <h1>
+                    <i class="fa-solid fa-scale-balanced" style="color: var(--primary);"></i>
+                    Сравнение автомобилей
+                </h1>
+                <div class="compare-actions">
+                    <button class="btn-clear" id="clearCompare">
+                        <i class="fa-solid fa-trash-can"></i>
+                        Очистить список
+                    </button>
+                </div>
+            </div>
+            
             <div id="compareContainer"></div>
         </section>
 

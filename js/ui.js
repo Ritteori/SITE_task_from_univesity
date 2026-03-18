@@ -166,49 +166,122 @@ function showCarDetail(carId) {
     });
 }
 
-// Рендер страницы сравнения (обновлённая версия)
+// Рендер страницы сравнения (табличная версия)
 function renderCompare() {
     const container = document.getElementById('compareContainer');
+    
     if (compareList.length === 0) {
-        container.innerHTML = '<p>Нет автомобилей для сравнения. Добавьте авто в сравнение из каталога.</p>';
+        container.innerHTML = `
+            <div class="compare-empty">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <h3>Список сравнения пуст</h3>
+                <p>Добавьте автомобили в сравнение из каталога</p>
+                <a href="#" data-page="catalog" class="btn btn-primary nav-link">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Перейти в каталог
+                </a>
+            </div>
+        `;
         return;
     }
     
     const compareCars = cars.filter(c => compareList.includes(c.id));
     
-    let html = '<div style="margin-bottom: 1rem;"><button class="btn btn-outline" id="clearCompare">Очистить список</button></div>';
-    html += '<table class="compare-table"><tr><th>Характеристика</th>';
+    // Локализация типов кузова
+    const bodyMap = {
+        'sedan': 'Седан',
+        'suv': 'Внедорожник',
+        'hatchback': 'Хэтчбек',
+        'wagon': 'Универсал'
+    };
     
-    compareCars.forEach(c => html += `<th>${c.make} ${c.model} <button class="icon-btn remove-compare" data-id="${c.id}" style="float: right;" title="Убрать"><i class="fa-solid fa-xmark"></i></button></th>`);
+    // Начинаем формировать таблицу
+    let html = '<div class="compare-table-wrapper">';
+    html += '<table class="compare-table">';
+    
+    // Шапка с автомобилями
+    html += '<tr><th>Характеристики</th>';
+    compareCars.forEach(car => {
+        html += `
+            <th style="position: relative;">
+                <button class="remove-car-btn" data-id="${car.id}" title="Убрать из сравнения">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="compare-car-header">
+                    <img src="${car.image}" alt="${car.make} ${car.model}" class="compare-car-image">
+                    <div class="compare-car-title">${car.make} ${car.model}</div>
+                    <div class="compare-car-price">$${car.price.toLocaleString()}</div>
+                </div>
+            </th>
+        `;
+    });
     html += '</tr>';
     
-    const rows = [
-        { label: 'Год', field: 'year' },
-        { label: 'Цена, $', field: 'price' },
-        { label: 'Кузов', field: 'body', transform: (v) => v === 'sedan' ? 'Седан' : v === 'suv' ? 'Внедорожник' : v },
-        { label: 'Двигатель, л', field: 'engine' },
-        { label: 'Коробка', field: 'transmission', transform: (v) => v === 'auto' ? 'Автомат' : 'Механика' },
-        { label: 'Пробег, км', field: 'mileage' },
-        { label: 'Цвет', field: 'color' }
-    ];
+    // Год
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-calendar"></i></span> Год выпуска</td>';
+    compareCars.forEach(car => html += `<td><span class="compare-spec-value">${car.year}</span></td>`);
+    html += '</tr>';
     
-    rows.forEach(r => {
-        html += `<tr><td>${r.label}</td>`;
-        compareCars.forEach(c => {
-            let value = c[r.field];
-            if (r.transform) value = r.transform(value);
-            html += `<td>${value}</td>`;
-        });
-        html += '</tr>';
+    // Пробег
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-road"></i></span> Пробег</td>';
+    compareCars.forEach(car => html += `<td><span class="compare-spec-value">${car.mileage.toLocaleString()} км</span></td>`);
+    html += '</tr>';
+    
+    // Двигатель
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-gas-pump"></i></span> Двигатель</td>';
+    compareCars.forEach(car => html += `<td><span class="compare-spec-value">${car.engine} л</span></td>`);
+    html += '</tr>';
+    
+    // Коробка передач
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-gear"></i></span> Коробка</td>';
+    compareCars.forEach(car => {
+        const trans = car.transmission === 'auto' ? 'Автомат' : 'Механика';
+        html += `<td><span class="compare-spec-value">${trans}</span></td>`;
     });
+    html += '</tr>';
+    
+    // Кузов
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-car"></i></span> Кузов</td>';
+    compareCars.forEach(car => html += `<td><span class="compare-spec-value">${bodyMap[car.body] || car.body}</span></td>`);
+    html += '</tr>';
+    
+    // Цвет
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-palette"></i></span> Цвет</td>';
+    compareCars.forEach(car => html += `<td><span class="compare-spec-value">${car.color}</span></td>`);
+    html += '</tr>';
+    
+    // Привод (добавим для примера, можно расширить)
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-solid fa-tire"></i></span> Привод</td>';
+    compareCars.forEach(car => html += `<td><span class="compare-spec-value">Передний</span></td>`);
+    html += '</tr>';
+    
+    // Кнопка подробнее в последней строке
+    html += '<tr><td><span class="compare-spec-icon"><i class="fa-regular fa-eye"></i></span> Действия</td>';
+    compareCars.forEach(car => {
+        html += `
+            <td>
+                <button class="btn-compare-detail details-btn" data-id="${car.id}">
+                    <i class="fa-regular fa-eye"></i> Подробнее
+                </button>
+                <button class="icon-btn favorite-btn ${currentUser.favorites.includes(car.id) ? 'active' : ''}" 
+                        data-id="${car.id}" title="В избранное" style="margin-left: 0.5rem;">
+                    <i class="fa-solid fa-heart"></i>
+                </button>
+            </td>
+        `;
+    });
+    html += '</tr>';
+    
     html += '</table>';
+    html += '</div>';
     
     container.innerHTML = html;
     
     // Обработчики удаления из сравнения
-    document.querySelectorAll('.remove-compare').forEach(btn => {
+    document.querySelectorAll('.remove-car-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             const id = parseInt(btn.dataset.id);
             const idx = compareList.indexOf(id);
             if (idx !== -1) {
@@ -220,12 +293,14 @@ function renderCompare() {
         });
     });
     
-    // Очистить всё
+    // Обработчик для кнопки "Очистить всё"
     document.getElementById('clearCompare')?.addEventListener('click', () => {
-        compareList = [];
-        saveCompare();
-        renderCompare();
-        refreshActionButtons();
+        if (compareList.length > 0 && confirm('Очистить список сравнения?')) {
+            compareList = [];
+            saveCompare();
+            renderCompare();
+            refreshActionButtons();
+        }
     });
 }
 
