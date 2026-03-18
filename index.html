@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift.by — площадка по продаже авто</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Наши стили -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">SHIFT<span>.by</span></div>
+        <nav>
+            <ul>
+                <li><a href="#" data-page="home" class="nav-link active">Главная</a></li>
+                <li><a href="#" data-page="catalog" class="nav-link">Каталог</a></li>
+                <li><a href="#" data-page="journal" class="nav-link">Журнал</a></li>
+                <li><a href="#" data-page="compare" class="nav-link">Сравнение</a></li>
+                <li><a href="#" data-page="calculator" class="nav-link">Калькулятор</a></li>
+                <li><a href="#" data-page="contacts" class="nav-link">Контакты</a></li>
+                <li><a href="#" data-page="profile" class="nav-link">Личный кабинет</a></li>
+            </ul>
+        </nav>
+        <button class="btn" id="addListingBtn">+ Подать объявление</button>
+    </header>
+
+    <div class="container">
+        <!-- Главная -->
+        <section id="home" class="page active">
+            <h1>Shift.by — надёжная площадка по продаже автомобилей в Беларуси</h1>
+            <div class="filters-panel" style="justify-content: center;">
+                <input type="text" placeholder="Марка или модель..." id="quickSearch" style="flex:2; padding:0.8rem;">
+                <button class="btn btn-primary" id="searchBtn">Найти</button>
+            </div>
+
+            <!-- Блок о компании -->
+            <div style="background: white; border-radius: var(--border-radius); padding: 2rem; margin: 2rem 0; box-shadow: var(--shadow);">
+                <h2>О компании Shift.by</h2>
+                <p style="font-size: 1.1rem; line-height: 1.6; margin: 1rem 0;">
+                    Shift.by — это современная онлайн-площадка, созданная для удобной и безопасной продажи автомобилей в Беларуси. Мы объединяем частных продавцов и официальных дилеров, предлагая прозрачные условия сделки и широкий выбор автомобилей с пробегом и новых.
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-around; margin: 2rem 0;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">500+</div>
+                        <div>Автомобилей в каталоге</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">3 года</div>
+                        <div>На рынке Беларуси</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">98%</div>
+                        <div>Сделок проходят безопасно</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="#" data-page="catalog" class="btn btn-primary nav-link">Перейти в каталог</a>
+                    <button class="btn btn-outline" id="addListingBtn">Подать объявление</button>
+                </div>
+            </div>
+
+            <!-- Блок преимуществ -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; color: var(--primary);"></i>
+                    <h3>Умный поиск</h3>
+                    <p>Удобные фильтры помогут найти авто по любым параметрам</p>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                    <i class="fa-solid fa-scale-balanced" style="font-size: 2rem; color: var(--primary);"></i>
+                    <h3>Сравнение моделей</h3>
+                    <p>Сравнивайте характеристики и выбирайте лучшее</p>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                    <i class="fa-solid fa-calculator" style="font-size: 2rem; color: var(--primary);"></i>
+                    <h3>Кредитный калькулятор</h3>
+                    <p>Рассчитайте ежемесячный платёж прямо на сайте</p>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                    <i class="fa-brands fa-telegram" style="font-size: 2rem; color: var(--primary);"></i>
+                    <h3>Связь в мессенджерах</h3>
+                    <p>Общайтесь с продавцом в Telegram, Viber, WhatsApp</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Каталог -->
+        <section id="catalog" class="page">
+            <h1>Каталог автомобилей</h1>
+            <div class="filters-panel">
+                <div class="filter-group">
+                    <label>Марка</label>
+                    <select id="filterMake">
+                        <option value="">Все</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Модель</label>
+                    <select id="filterModel" disabled>
+                        <option value="">Сначала выберите марку</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Тип кузова</label>
+                    <select id="filterBody">
+                        <option value="">Все</option>
+                        <option value="sedan">Седан</option>
+                        <option value="suv">Внедорожник</option>
+                        <option value="hatchback">Хэтчбек</option>
+                        <option value="wagon">Универсал</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Коробка</label>
+                    <select id="filterTransmission">
+                        <option value="">Все</option>
+                        <option value="manual">Механика</option>
+                        <option value="auto">Автомат</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Цена до, $</label>
+                    <input type="number" id="filterPriceMax" placeholder="например 20000">
+                </div>
+                <div class="filter-group">
+                    <label>Год от</label>
+                    <input type="number" id="filterYearMin" placeholder="2015">
+                </div>
+                <button class="btn btn-primary" id="applyFilters">Применить</button>
+            </div>
+            <div class="cars-grid" id="catalogCars"></div>
+        </section>
+
+        <!-- Детальная карточка (заполняется динамически) -->
+        <section id="carDetail" class="page"></section>
+
+        <!-- Подача объявления -->
+        <section id="addListing" class="page">
+            <h1>Подать объявление</h1>
+            <div class="step-indicator">
+                <div class="step active">Категория</div>
+                <div class="step">Характеристики</div>
+                <div class="step">Фото</div>
+                <div class="step">Цена и контакты</div>
+            </div>
+            <div id="step1" class="step-content">
+                <p>Выберите категорию:</p>
+                <select style="width:100%; padding:0.8rem;">
+                    <option>Легковые авто</option>
+                    <option>Мото</option>
+                    <option>Коммерческий</option>
+                </select>
+                <button class="btn btn-primary next-step" style="margin-top:1rem;">Далее</button>
+            </div>
+            <p style="margin-top:2rem;">*Полноценная многошаговая форма будет реализована в рабочей версии.</p>
+        </section>
+
+        <!-- Личный кабинет -->
+        <section id="profile" class="page">
+            <h1>Личный кабинет</h1>
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="favorites">Избранное</button>
+                <button class="tab-btn" data-tab="history">История просмотров</button>
+                <button class="tab-btn" data-tab="myads">Мои объявления</button>
+                <button class="tab-btn" data-tab="settings">Настройки</button>
+            </div>
+            <div class="tab-content" id="favoritesTab">
+                <h3>Избранные автомобили</h3>
+                <div class="cars-grid" id="favoritesList"></div>
+            </div>
+            <div class="tab-content" id="historyTab" style="display:none;">
+                <h3>История просмотров</h3>
+                <div class="cars-grid" id="historyList"></div>
+            </div>
+            <div class="tab-content" id="myadsTab" style="display:none;">
+                <p>У вас пока нет активных объявлений.</p>
+            </div>
+            <div class="tab-content" id="settingsTab" style="display:none;">
+                <p>Настройки профиля (имя, телефон, email).</p>
+            </div>
+        </section>
+
+        <!-- Журнал -->
+        <section id="journal" class="page">
+            <h1>Журнал об авто</h1>
+            <div class="articles-list" id="articlesContainer"></div>
+        </section>
+
+        <!-- Сравнение -->
+        <section id="compare" class="page">
+            <h1>Сравнение автомобилей</h1>
+            <div id="compareContainer"></div>
+        </section>
+
+        <!-- Кредитный калькулятор -->
+        <section id="calculator" class="page">
+            <h1>Кредитный калькулятор</h1>
+            <div class="calculator">
+                <div class="calc-row">
+                    <label>Цена автомобиля, $</label>
+                    <input type="number" id="carPrice" value="15000" step="1000">
+                </div>
+                <div class="calc-row">
+                    <label>Первоначальный взнос, $</label>
+                    <input type="number" id="downPayment" value="3000" step="500">
+                </div>
+                <div class="calc-row">
+                    <label>Срок, мес</label>
+                    <input type="number" id="loanTerm" value="60" step="12">
+                </div>
+                <div class="calc-row">
+                    <label>Ставка, %</label>
+                    <input type="number" id="interestRate" value="5.5" step="0.1">
+                </div>
+                <button class="btn btn-primary" id="calcLoan">Рассчитать</button>
+                <div class="calc-row">
+                    <label>Ежемесячный платёж:</label>
+                    <div class="calc-result" id="monthlyPayment">$0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section id="contacts" class="page">
+            <h1>Контакты</h1>
+            <p>Email: shift_by@gmail.ru</p>
+            <p>Telegram: <a href="https://t.me/shift_by" target="_blank">@shift_by</a></p>
+            <p>Instagram: @shift.by</p>
+            <p>Адрес: г. Минск, ул. Интернет-маркетинга, д. 1</p>
+            <iframe src="https://maps.google.com/maps?q=Minsk&output=embed" width="100%" height="300" style="border:0; margin-top:1rem;"></iframe>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Shift.by — Площадка по продаже автомобилей в Беларуси
+    </footer>
+
+    <!-- Модальное окно для статей -->
+    <div id="articleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDate" style="color: #666; margin-bottom: 1rem;"></p>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,519 @@
+:root {
+    --primary: rgb(0, 103, 99);
+    --primary-dark: rgb(23, 69, 67);
+    --bg-light: rgb(220, 225, 230);
+    --text-dark: #1e2a2a;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.05);
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Хедер */
+header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.logo span {
+    font-weight: 300;
+    color: #b8e2de;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: 0.2s;
+}
+
+nav a:hover, nav a.active {
+    border-bottom-color: white;
+}
+
+.btn {
+    background: white;
+    color: var(--primary-dark);
+    padding: 0.6rem 1.4rem;
+    border-radius: 40px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+/* Основной контейнер */
+.container {
+    max-width: 1300px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+}
+
+/* Секции (страницы) */
+.page {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+.page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Карточки автомобилей */
+.cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.car-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+    position: relative;
+}
+.car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.car-img {
+    height: 180px;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.car-img .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--primary);
+    color: white;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.car-info {
+    padding: 1rem;
+}
+.car-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+.car-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin: 0.5rem 0;
+}
+.car-details {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #4a5a5a;
+    margin-bottom: 0.8rem;
+}
+.car-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.8rem;
+}
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #6f8a8a;
+    transition: 0.2s;
+}
+.icon-btn:hover {
+    color: var(--primary);
+}
+.icon-btn.active {
+    color: #e53e3e;
+}
+
+/* Фильтры */
+.filters-panel {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+    box-shadow: var(--shadow);
+}
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+.filter-group label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+.filter-group select, .filter-group input {
+    padding: 0.5rem;
+    border: 1px solid #cbd5d5;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+.filter-group input[type="range"] {
+    padding: 0;
+}
+
+/* Детальная карточка */
+.car-detail {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+.detail-gallery {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+.main-photo {
+    flex: 2;
+    min-width: 300px;
+    height: 300px;
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--border-radius);
+}
+.thumbnails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.thumb {
+    height: 90px;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.2s;
+}
+.thumb:hover, .thumb.active {
+    opacity: 1;
+    border: 2px solid var(--primary);
+}
+
+.detail-specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+.spec-item {
+    border-bottom: 1px dashed #cbd5d5;
+    padding: 0.5rem 0;
+}
+
+/* Таблица сравнения */
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+.compare-table th, .compare-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+.compare-table th {
+    background: var(--primary);
+    color: white;
+}
+.compare-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Личный кабинет */
+.profile-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+.tab-btn {
+    padding: 0.6rem 1.5rem;
+    background: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+}
+.tab-content {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+/* Форма подачи объявления (шаги) */
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+    counter-reset: step;
+}
+.step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+.step::before {
+    counter-increment: step;
+    content: counter(step);
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: var(--bg-light);
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+    line-height: 30px;
+    font-weight: bold;
+}
+.step.active::before {
+    background: var(--primary);
+    color: white;
+}
+
+/* Журнал - карточки статей */
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.article-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.article-image {
+    height: 180px;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+    background-image: url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=300&fit=crop');
+}
+
+.article-info {
+    padding: 1.2rem;
+}
+
+.article-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.article-date {
+    font-size: 0.85rem;
+    color: #6f8a8a;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.article-preview {
+    font-size: 0.95rem;
+    color: #4a5a5a;
+    line-height: 1.4;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.2s;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: var(--primary-dark);
+}
+
+#modalContent {
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+#modalContent p {
+    margin-bottom: 1rem;
+}
+
+/* Калькулятор */
+.calculator {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    max-width: 500px;
+}
+.calc-row {
+    margin-bottom: 1rem;
+}
+.calc-row label {
+    display: block;
+    font-weight: 600;
+}
+.calc-result {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+}
+
+/* Футер */
+footer {
+    background: var(--primary-dark);
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    nav ul {
+        justify-content: center;
+    }
+    .filters-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 1.5rem;
+        margin: 10% auto;
+        width: 95%;
+    }
+}
