@@ -264,32 +264,68 @@ function closeModal() {
     document.getElementById('articleModal').style.display = 'none';
 }
 
-// Инициализация калькулятора (обновлённая версия)
+// Инициализация калькулятора (новая версия с ползунками)
 function initCalculator() {
-    // Добавим выбор банка
-    const calculatorDiv = document.querySelector('.calculator');
+    const carPrice = document.getElementById('carPrice');
+    const carPriceRange = document.getElementById('carPriceRange');
+    const priceValue = document.getElementById('priceValue');
     
-    // Добавляем select перед существующими полями
-    const bankSelect = document.createElement('div');
-    bankSelect.className = 'calc-row';
-    bankSelect.innerHTML = `
-        <label>Банк / программа</label>
-        <select id="bankProgram">
-            <option value="5.5">Беларусбанк (5.5%)</option>
-            <option value="6.0">Белинвестбанк (6.0%)</option>
-            <option value="4.9">Акция "Авто на выгодных" (4.9%)</option>
-            <option value="7.0">Приорбанк (7.0%)</option>
-        </select>
-    `;
+    const downPayment = document.getElementById('downPayment');
+    const downPaymentRange = document.getElementById('downPaymentRange');
+    const downValue = document.getElementById('downValue');
     
-    // Вставляем первым элементом
-    calculatorDiv.insertBefore(bankSelect, calculatorDiv.firstChild);
+    const loanTerm = document.getElementById('loanTerm');
+    const loanTermRange = document.getElementById('loanTermRange');
+    const termValue = document.getElementById('termValue');
     
-    document.getElementById('calcLoan').addEventListener('click', () => {
-        const price = parseFloat(document.getElementById('carPrice').value) || 0;
-        const down = parseFloat(document.getElementById('downPayment').value) || 0;
-        const term = parseFloat(document.getElementById('loanTerm').value) || 1;
-        const rate = parseFloat(document.getElementById('bankProgram').value) || 5.5;
+    const bankProgram = document.getElementById('bankProgram');
+    const interestRateDisplay = document.getElementById('interestRateDisplay');
+    
+    // Синхронизация ползунков и числовых полей
+    function syncInputs(range, number, display, suffix = '$', isPrice = false) {
+        range.addEventListener('input', function() {
+            const val = this.value;
+            number.value = val;
+            if (isPrice) {
+                display.textContent = Number(val).toLocaleString();
+            } else {
+                display.textContent = val;
+            }
+            calculatePayment();
+        });
+        
+        number.addEventListener('input', function() {
+            let val = this.value;
+            if (val < this.min) val = this.min;
+            if (val > this.max) val = this.max;
+            this.value = val;
+            range.value = val;
+            if (isPrice) {
+                display.textContent = Number(val).toLocaleString();
+            } else {
+                display.textContent = val;
+            }
+            calculatePayment();
+        });
+    }
+    
+    syncInputs(carPriceRange, carPrice, priceValue, '$', true);
+    syncInputs(downPaymentRange, downPayment, downValue, '$', true);
+    syncInputs(loanTermRange, loanTerm, termValue, ' мес', false);
+    
+    // Обновление процентной ставки при выборе банка
+    bankProgram.addEventListener('change', function() {
+        const rate = this.value;
+        interestRateDisplay.textContent = rate + '%';
+        calculatePayment();
+    });
+    
+    // Основная функция расчёта
+    function calculatePayment() {
+        const price = parseFloat(carPrice.value) || 0;
+        const down = parseFloat(downPayment.value) || 0;
+        const term = parseFloat(loanTerm.value) || 1;
+        const rate = parseFloat(bankProgram.value) || 5.5;
         
         const principal = price - down;
         const monthlyRate = rate / 100 / 12;
@@ -301,21 +337,20 @@ function initCalculator() {
             payment = principal * monthlyRate * Math.pow(1 + monthlyRate, term) / (Math.pow(1 + monthlyRate, term) - 1);
         }
         
-        document.getElementById('monthlyPayment').innerHTML = `
-            $${payment.toFixed(2)} <small style="font-size: 0.8rem;">в месяц</small>
-            <br>
-            <small style="font-size: 0.7rem; color: #666;">Общая сумма: $${(payment * term).toFixed(2)}</small>
-        `;
-    });
+        const totalPayment = payment * term;
+        const overpayment = totalPayment - principal;
+        
+        // Обновляем отображение
+        document.getElementById('monthlyPayment').innerHTML = `$${payment.toFixed(0)}`;
+        document.getElementById('loanAmount').textContent = `$${principal.toLocaleString()}`;
+        document.getElementById('overpayment').textContent = `$${overpayment.toFixed(0)}`;
+        interestRateDisplay.textContent = rate + '%';
+        
+        // Прогресс-бар (соотношение выплаченного к общей сумме)
+        const progressPercent = (payment * term / (price * 1.2)) * 100;
+        document.getElementById('paymentProgress').style.width = Math.min(progressPercent, 100) + '%';
+    }
     
-    // Добавим быстрые подсказки
-    const hints = document.createElement('div');
-    hints.className = 'calc-row';
-    hints.innerHTML = `
-        <p style="font-size: 0.9rem; color: #666;">
-            <i class="fa-solid fa-info-circle"></i> 
-            Пример: при цене $25000, первом взносе $5000 на 5 лет (60 мес.) платёж ≈ $380
-        </p>
-    `;
-    calculatorDiv.appendChild(hints);
+    // Первоначальный расчёт
+    calculatePayment();
 }

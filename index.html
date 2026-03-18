@@ -195,29 +195,107 @@
         </section>
 
         <!-- Кредитный калькулятор -->
-        <section id="calculator" class="page">
-            <h1>Кредитный калькулятор</h1>
+       <section id="calculator" class="page">
+            <h1><i class="fa-solid fa-calculator"></i> Кредитный калькулятор</h1>
+            
             <div class="calculator">
-                <div class="calc-row">
-                    <label>Цена автомобиля, $</label>
-                    <input type="number" id="carPrice" value="15000" step="1000">
+                <!-- Выбор банка -->
+                <div style="margin-bottom: 2rem;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                        <i class="fa-solid fa-building-columns"></i> Выберите банк / программу
+                    </label>
+                    <select id="bankProgram" class="bank-select">
+                        <option value="5.5">🏦 Беларусбанк (5.5%)</option>
+                        <option value="6.0">💳 Белинвестбанк (6.0%)</option>
+                        <option value="4.9">🔥 Акция "Авто на выгодных" (4.9%)</option>
+                        <option value="7.0">🏛️ Приорбанк (7.0%)</option>
+                    </select>
                 </div>
-                <div class="calc-row">
-                    <label>Первоначальный взнос, $</label>
-                    <input type="number" id="downPayment" value="3000" step="500">
+
+                <!-- Сетка с параметрами -->
+                <div class="calc-grid">
+                    <!-- Цена автомобиля -->
+                    <div class="calc-card">
+                        <h3>
+                            <i class="fa-solid fa-car" style="color: var(--primary);"></i>
+                            Цена автомобиля
+                        </h3>
+                        <div class="input-group">
+                            <label>
+                                <span>$</span>
+                                <span id="priceValue">15 000</span>
+                            </label>
+                            <input type="range" id="carPriceRange" class="range-input" min="5000" max="100000" step="1000" value="15000">
+                            <input type="number" id="carPrice" class="number-input" value="15000" min="5000" max="100000" step="1000">
+                        </div>
+                    </div>
+
+                    <!-- Первоначальный взнос -->
+                    <div class="calc-card">
+                        <h3>
+                            <i class="fa-solid fa-hand-holding-dollar" style="color: var(--primary);"></i>
+                            Первоначальный взнос
+                        </h3>
+                        <div class="input-group">
+                            <label>
+                                <span>$</span>
+                                <span id="downValue">3 000</span>
+                            </label>
+                            <input type="range" id="downPaymentRange" class="range-input" min="0" max="50000" step="500" value="3000">
+                            <input type="number" id="downPayment" class="number-input" value="3000" min="0" max="50000" step="500">
+                        </div>
+                    </div>
+
+                    <!-- Срок кредита -->
+                    <div class="calc-card">
+                        <h3>
+                            <i class="fa-regular fa-calendar" style="color: var(--primary);"></i>
+                            Срок кредита
+                        </h3>
+                        <div class="input-group">
+                            <label>
+                                <span>мес.</span>
+                                <span id="termValue">60</span>
+                            </label>
+                            <input type="range" id="loanTermRange" class="range-input" min="12" max="120" step="12" value="60">
+                            <input type="number" id="loanTerm" class="number-input" value="60" min="12" max="120" step="12">
+                        </div>
+                    </div>
                 </div>
-                <div class="calc-row">
-                    <label>Срок, мес</label>
-                    <input type="number" id="loanTerm" value="60" step="12">
+
+                <!-- Блок результата -->
+                <div class="calc-result-block" id="resultBlock">
+                    <div class="result-main">
+                        <div class="label">Ежемесячный платёж</div>
+                        <div class="value" id="monthlyPayment">$287</div>
+                        <div class="period">в месяц</div>
+                    </div>
+                    <div class="result-details">
+                        <div class="detail-row">
+                            <span>Сумма кредита:</span>
+                            <span><strong id="loanAmount">$12 000</strong></span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Процентная ставка:</span>
+                            <span><strong id="interestRateDisplay">5.5%</strong></span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Переплата:</span>
+                            <span><strong id="overpayment">$5 220</strong></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="paymentProgress" style="width: 45%;"></div>
+                        </div>
+                        <div style="font-size: 0.85rem; opacity: 0.9;">
+                            <i class="fa-regular fa-clock"></i> Погашение кредита
+                        </div>
+                    </div>
                 </div>
-                <div class="calc-row">
-                    <label>Ставка, %</label>
-                    <input type="number" id="interestRate" value="5.5" step="0.1">
-                </div>
-                <button class="btn btn-primary" id="calcLoan">Рассчитать</button>
-                <div class="calc-row">
-                    <label>Ежемесячный платёж:</label>
-                    <div class="calc-result" id="monthlyPayment">$0</div>
+
+                <!-- Подсказки -->
+                <div class="calc-hints">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    Пример: при цене $25 000, первом взносе $5 000 на 5 лет (60 мес.) платёж ≈ $380
                 </div>
             </div>
         </section>
@@ -225,7 +303,7 @@
         <!-- Контакты -->
         <section id="contacts" class="page">
             <h1>Контакты</h1>
-            <p>Email: shift_by@gmail.ru</p>
+            <p>Email: shift_by@gmail.ru</   p>
             <p>Telegram: <a href="https://t.me/shift_by" target="_blank">@shift_by</a></p>
             <p>Instagram: @shift.by</p>
             <p>Адрес: г. Минск, ул. Интернет-маркетинга, д. 1</p>
