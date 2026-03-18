@@ -138,23 +138,189 @@
 
         <!-- Подача объявления -->
         <section id="addListing" class="page">
-            <h1>Подать объявление</h1>
-            <div class="step-indicator">
-                <div class="step active">Категория</div>
-                <div class="step">Характеристики</div>
-                <div class="step">Фото</div>
-                <div class="step">Цена и контакты</div>
+            <h1><i class="fa-regular fa-rectangle-ad"></i> Подать объявление</h1>
+            
+            <div class="step-indicator" id="stepIndicator">
+                <div class="step active" data-step="1">Категория</div>
+                <div class="step" data-step="2">Характеристики</div>
+                <div class="step" data-step="3">Фото</div>
+                <div class="step" data-step="4">Цена и контакты</div>
             </div>
-            <div id="step1" class="step-content">
-                <p>Выберите категорию:</p>
-                <select style="width:100%; padding:0.8rem;">
-                    <option>Легковые авто</option>
-                    <option>Мото</option>
-                    <option>Коммерческий</option>
-                </select>
-                <button class="btn btn-primary next-step" style="margin-top:1rem;">Далее</button>
+
+            <div class="listing-form-container">
+                <!-- Шаг 1: Категория -->
+                <div id="step1" class="step-content active">
+                    <div class="form-card">
+                        <h3>Выберите категорию транспортного средства</h3>
+                        
+                        <div class="category-grid">
+                            <div class="category-option" data-category="car">
+                                <i class="fa-solid fa-car"></i>
+                                <span>Легковой автомобиль</span>
+                            </div>
+                            <div class="category-option" data-category="motorcycle">
+                                <i class="fa-solid fa-motorcycle"></i>
+                                <span>Мотоцикл</span>
+                            </div>
+                            <div class="category-option" data-category="truck">
+                                <i class="fa-solid fa-truck"></i>
+                                <span>Коммерческий</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                            <button class="btn btn-primary next-step" id="continueToStep4" disabled>
+                                Далее <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 2: Характеристики -->
+                <div id="step2" class="step-content" style="display: none;">
+                    <div class="form-card">
+                        <h3>Основные характеристики</h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Марка *</label>
+                                <input type="text" id="listingMake" class="form-input" placeholder="Например: Audi" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Модель *</label>
+                                <input type="text" id="listingModel" class="form-input" placeholder="Например: A6" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Год выпуска *</label>
+                                <input type="number" id="listingYear" class="form-input" min="1900" max="2026" value="2020" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Тип кузова</label>
+                                <select id="listingBody" class="form-select">
+                                    <option value="sedan">Седан</option>
+                                    <option value="suv">Внедорожник</option>
+                                    <option value="hatchback">Хэтчбек</option>
+                                    <option value="wagon">Универсал</option>
+                                    <option value="coupe">Купе</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Объём двигателя, л</label>
+                                <input type="number" id="listingEngine" class="form-input" step="0.1" min="0.6" max="6.0" value="2.0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Коробка передач</label>
+                                <select id="listingTransmission" class="form-select">
+                                    <option value="auto">Автомат</option>
+                                    <option value="manual">Механика</option>
+                                    <option value="robot">Робот</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Пробег, км</label>
+                                <input type="number" id="listingMileage" class="form-input" min="0" step="1000" value="50000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Цвет</label>
+                                <input type="text" id="listingColor" class="form-input" placeholder="Например: чёрный">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button class="btn btn-outline prev-step" data-prev="1">
+                                <i class="fa-solid fa-arrow-left"></i> Назад
+                            </button>
+                            <button class="btn btn-primary next-step" data-next="3">
+                                Далее <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 3: Фото -->
+                <div id="step3" class="step-content" style="display: none;">
+                    <div class="form-card">
+                        <h3>Загрузите фотографии</h3>
+                        <p style="color: #6f8a8a; margin-bottom: 1.5rem;">Минимум 1 фото, максимум 10. Первое фото будет главным.</p>
+                        
+                        <div class="photo-upload-area" id="dropZone">
+                            <i class="fa-solid fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                            <p>Перетащите фото сюда или <span style="color: var(--primary); font-weight: 600; cursor: pointer;">выберите файл</span></p>
+                            <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                            <p style="font-size: 0.85rem; color: #aaa; margin-top: 0.5rem;">Поддерживаются JPG, PNG до 10 МБ</p>
+                        </div>
+
+                        <div class="photo-preview-grid" id="photoPreview"></div>
+
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button class="btn btn-outline prev-step" data-prev="2">
+                                <i class="fa-solid fa-arrow-left"></i> Назад
+                            </button>
+                            <button class="btn btn-primary next-step" id="continueToStep4" disabled>
+                                Далее <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 4: Цена и контакты -->
+                <div id="step4" class="step-content" style="display: none;">
+                    <div class="form-card">
+                        <h3>Цена и контактные данные</h3>
+                        
+                        <div class="form-group">
+                            <label>Цена, $ *</label>
+                            <input type="number" id="listingPrice" class="form-input" min="100" step="100" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Описание</label>
+                            <textarea id="listingDescription" class="form-input" rows="4" placeholder="Расскажите о состоянии автомобиля, дополнительном оборудовании..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Ваше имя *</label>
+                            <input type="text" id="listingSellerName" class="form-input" value="Герман Т.В." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Телефон *</label>
+                            <input type="tel" id="listingPhone" class="form-input" value="+375 (29) 123-45-67" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Дополнительные контакты</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.3rem;">
+                                    <input type="checkbox" id="contactTelegram" checked> Telegram
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.3rem;">
+                                    <input type="checkbox" id="contactWhatsapp" checked> WhatsApp
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.3rem;">
+                                    <input type="checkbox" id="contactViber" checked> Viber
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button class="btn btn-outline prev-step" data-prev="3">
+                                <i class="fa-solid fa-arrow-left"></i> Назад
+                            </button>
+                            <button class="btn btn-primary" id="submitListing">
+                                <i class="fa-regular fa-circle-check"></i> Опубликовать объявление
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p style="margin-top:2rem;">*Полноценная многошаговая форма будет реализована в рабочей версии.</p>
         </section>
 
         <!-- Личный кабинет -->

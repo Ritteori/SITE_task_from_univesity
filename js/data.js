@@ -48,3 +48,25 @@ function addToHistory(carId) {
         saveHistory();
     }
 }
+
+// Массив для хранения объявлений пользователя
+let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+
+// Функция сохранения объявлений
+function saveListings() {
+    localStorage.setItem('userListings', JSON.stringify(userListings));
+}
+
+// Функция добавления нового объявления
+function addListing(listingData) {
+    const newListing = {
+        id: Date.now(), // уникальный ID на основе времени
+        ...listingData,
+        date: new Date().toLocaleDateString('ru-RU'),
+        status: 'active',
+        views: 0
+    };
+    userListings.unshift(newListing);
+    saveListings();
+    return newListing;
+}

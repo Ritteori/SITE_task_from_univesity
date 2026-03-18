@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initFilters();
     initProfileTabs();
     initCalculator();
+    initListingForm();
 
     // Делегирование событий на кнопки внутри карточек
     document.addEventListener('click', (e) => {
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('profileSettingsForm')?.querySelector('button')?.addEventListener('click', () => {
         alert('Настройки сохранены (демо-режим)');
     });
-    
+
     // Показываем главную страницу по умолчанию
     showPage('home');
 });

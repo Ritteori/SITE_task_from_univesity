@@ -1,4 +1,4 @@
-f// Рендер одной карточки автомобиля (обновлённая версия с иконками и локализацией)
+// Рендер одной карточки автомобиля (обновлённая версия с иконками и локализацией)
 function renderCarCard(car, showActions = true) {
     const card = document.createElement('div');
     card.className = 'car-card';
@@ -428,4 +428,355 @@ function initCalculator() {
     
     // Первоначальный расчёт
     calculatePayment();
+}
+
+// Переменные для хранения данных формы
+let listingPhotos = [];
+let selectedCategory = 'car';
+
+// Инициализация формы подачи объявления
+function initListingForm() {
+    console.log('Инициализация формы подачи объявления');
+    
+    // Выбор категории
+    document.querySelectorAll('.category-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedCategory = this.dataset.category;
+            console.log('Выбрана категория:', selectedCategory);
+        });
+    });
+    
+    // Навигация по шагам (кнопки "Далее") - ИСКЛЮЧАЕМ continueToStep4
+    document.querySelectorAll('.next-step:not(#continueToStep4)').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const nextStep = parseInt(this.dataset.next);
+            console.log('Клик по кнопке Далее на шаг:', nextStep);
+            
+            // Определяем текущий шаг (предыдущий)
+            const currentStep = nextStep - 1;
+            
+            if (validateStep(currentStep)) {
+                goToStep(nextStep);
+            }
+        });
+    });
+    
+    // Специальный обработчик для кнопки continueToStep4
+    const continueBtn = document.getElementById('continueToStep4');
+    if (continueBtn) {
+        continueBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Клик по специальной кнопке continueToStep4');
+            
+            if (validateStep(3)) { // Валидация шага 3
+                goToStep(4); // Переход на шаг 4
+            }
+        });
+    } else {
+        console.error('Кнопка continueToStep4 не найдена при инициализации');
+    }
+    
+    // Навигация по шагам (кнопки "Назад")
+    document.querySelectorAll('.prev-step').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const prevStep = parseInt(this.dataset.prev);
+            console.log('Клик по кнопке Назад на шаг:', prevStep);
+            goToStep(prevStep);
+        });
+    });
+    
+    // Загрузка фото
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    
+    if (dropZone && fileInput) {
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--primary)';
+            dropZone.style.background = 'rgba(0,103,99,0.02)';
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#cbd5d5';
+            dropZone.style.background = 'transparent';
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#cbd5d5';
+            dropZone.style.background = 'transparent';
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+    } else {
+        console.error('Элементы загрузки фото не найдены');
+    }
+    
+    // Отправка формы
+    const submitBtn = document.getElementById('submitListing');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', submitListingForm);
+    } else {
+        console.error('Кнопка submitListing не найдена');
+    }
+    
+    // Убеждаемся, что кнопка на шаге 3 правильно инициализирована
+    if (continueBtn) {
+        continueBtn.disabled = true;
+        console.log('Кнопка continueToStep4 инициализирована и отключена');
+    }
+}
+
+// Переход между шагами
+function goToStep(step) {
+    console.log('Переход на шаг:', step);
+    
+    // Проверяем, что step - число
+    if (isNaN(step)) {
+        console.error('Ошибка: step не является числом', step);
+        return;
+    }
+    
+    // Скрываем все шаги
+    document.querySelectorAll('.step-content').forEach(s => s.style.display = 'none');
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    
+    // Показываем нужный шаг
+    const targetStep = document.getElementById(`step${step}`);
+    if (targetStep) {
+        targetStep.style.display = 'block';
+    } else {
+        console.error(`Шаг ${step} не найден`);
+        return;
+    }
+    
+    // Активируем индикатор шага
+    const stepIndicator = document.querySelector(`.step[data-step="${step}"]`);
+    if (stepIndicator) {
+        stepIndicator.classList.add('active');
+    }
+    
+    // Прокрутка вверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Специальная обработка для шага 3 - проверяем кнопку "Далее"
+    if (step === 3) {
+        const continueBtn = document.getElementById('continueToStep4');
+        if (continueBtn) {
+            continueBtn.disabled = listingPhotos.length === 0;
+            console.log('Кнопка continueToStep4:', continueBtn.disabled ? 'отключена' : 'включена');
+        } else {
+            console.error('Кнопка continueToStep4 не найдена на шаге 3');
+        }
+    }
+}
+
+// Валидация шага
+function validateStep(step) {
+    switch(step) {
+        case 1: // Шаг 1 всегда валиден (выбор категории)
+            return true;
+        case 2: // Шаг 2 - характеристики
+            const make = document.getElementById('listingMake').value.trim();
+            const model = document.getElementById('listingModel').value.trim();
+            const year = document.getElementById('listingYear').value;
+            
+            if (!make || !model || !year) {
+                alert('Заполните обязательные поля: Марка, Модель, Год');
+                return false;
+            }
+            return true;
+        case 3: // Шаг 3 - фото
+            if (listingPhotos.length === 0) {
+                alert('Добавьте хотя бы одно фото');
+                return false;
+            }
+            return true;
+        default:
+            return true;
+    }
+}
+
+// Обработка файлов
+function handleFiles(files) {
+    const maxPhotos = 10;
+    const maxSize = 10 * 1024 * 1024; // 10 МБ
+    
+    console.log('Обработка файлов:', files.length);
+    
+    for (let file of files) {
+        if (listingPhotos.length >= maxPhotos) {
+            alert(`Максимум ${maxPhotos} фото`);
+            break;
+        }
+        
+        if (file.size > maxSize) {
+            alert(`Файл ${file.name} слишком большой (макс. 10 МБ)`);
+            continue;
+        }
+        
+        if (!file.type.startsWith('image/')) {
+            alert(`Файл ${file.name} не является изображением`);
+            continue;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            listingPhotos.push({
+                data: e.target.result,
+                name: file.name,
+                isMain: listingPhotos.length === 0 // первое фото - главное
+            });
+            console.log('Фото добавлено, всего:', listingPhotos.length);
+            updatePhotoPreview();
+            
+            // Активируем кнопку "Далее" если есть фото
+            const continueBtn = document.getElementById('continueToStep4');
+            if (continueBtn) {
+                continueBtn.disabled = listingPhotos.length === 0;
+                console.log('Кнопка continueToStep4 теперь:', continueBtn.disabled ? 'отключена' : 'включена');
+            } else {
+                console.error('Кнопка continueToStep4 не найдена при обработке фото');
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Обновление превью фото
+function updatePhotoPreview() {
+    const container = document.getElementById('photoPreview');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    listingPhotos.forEach((photo, index) => {
+        const div = document.createElement('div');
+        div.className = 'photo-preview-item';
+        div.innerHTML = `
+            <img src="${photo.data}" alt="Фото ${index + 1}">
+            <button class="remove-photo" data-index="${index}"><i class="fa-solid fa-xmark"></i></button>
+            ${index === 0 ? '<span class="main-photo-badge">Главное</span>' : ''}
+        `;
+        container.appendChild(div);
+    });
+    
+    // Обработчики удаления
+    document.querySelectorAll('.remove-photo').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = parseInt(btn.dataset.index);
+            listingPhotos.splice(index, 1);
+            
+            // Если удалили главное, делаем первое фото главным
+            if (index === 0 && listingPhotos.length > 0) {
+                listingPhotos[0].isMain = true;
+            }
+            
+            updatePhotoPreview();
+            
+            // Обновляем состояние кнопки
+            const continueBtn = document.getElementById('continueToStep4');
+            if (continueBtn) {
+                continueBtn.disabled = listingPhotos.length === 0;
+                console.log('После удаления, кнопка:', continueBtn.disabled ? 'отключена' : 'включена');
+            }
+        });
+    });
+}
+
+// Отправка формы
+function submitListingForm() {
+    if (!validateStep(4)) return;
+    
+    const priceInput = document.getElementById('listingPrice');
+    if (!priceInput) {
+        console.error('Элемент listingPrice не найден');
+        return;
+    }
+    
+    if (!validateStep(4)) return;
+    
+    const price = priceInput.value;
+    if (!price || price < 100) {
+        alert('Укажите корректную цену (мин. $100)');
+        return;
+    }
+    
+    // Собираем данные
+    const listingData = {
+        category: selectedCategory,
+        make: document.getElementById('listingMake').value,
+        model: document.getElementById('listingModel').value,
+        year: parseInt(document.getElementById('listingYear').value),
+        body: document.getElementById('listingBody').value,
+        engine: parseFloat(document.getElementById('listingEngine').value) || 2.0,
+        transmission: document.getElementById('listingTransmission').value,
+        mileage: parseInt(document.getElementById('listingMileage').value) || 0,
+        color: document.getElementById('listingColor').value || 'не указан',
+        price: parseInt(price),
+        description: document.getElementById('listingDescription').value,
+        sellerName: document.getElementById('listingSellerName').value,
+        phone: document.getElementById('listingPhone').value,
+        contacts: {
+            telegram: document.getElementById('contactTelegram').checked,
+            whatsapp: document.getElementById('contactWhatsapp').checked,
+            viber: document.getElementById('contactViber').checked
+        },
+        photos: listingPhotos.map(p => p.data),
+        mainPhoto: listingPhotos[0]?.data || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop'
+    };
+    
+    // Добавляем в массив объявлений
+    const newListing = addListing(listingData);
+    
+    // Показываем сообщение об успехе
+    alert('Объявление успешно опубликовано!');
+    
+    // Сбрасываем форму
+    resetListingForm();
+    
+    // Переходим в личный кабинет
+    showPage('profile');
+    loadProfileTab('myads');
+}
+
+// Сброс формы
+function resetListingForm() {
+    listingPhotos = [];
+    selectedCategory = 'car';
+    
+    document.getElementById('listingMake').value = '';
+    document.getElementById('listingModel').value = '';
+    document.getElementById('listingYear').value = '2020';
+    document.getElementById('listingBody').value = 'sedan';
+    document.getElementById('listingEngine').value = '2.0';
+    document.getElementById('listingTransmission').value = 'auto';
+    document.getElementById('listingMileage').value = '50000';
+    document.getElementById('listingColor').value = '';
+    document.getElementById('listingPrice').value = '';
+    document.getElementById('listingDescription').value = '';
+    document.getElementById('listingSellerName').value = 'Герман Т.В.';
+    document.getElementById('listingPhone').value = '+375 (29) 123-45-67';
+    
+    document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+    const defaultCategory = document.querySelector('.category-option[data-category="car"]');
+    if (defaultCategory) defaultCategory.classList.add('selected');
+    
+    updatePhotoPreview();
+    
+    // Деактивируем кнопку "Далее" на шаге 3
+    const continueBtn = document.getElementById('continueToStep4');
+    if (continueBtn) {
+        continueBtn.disabled = true;
+    }
+    
+    goToStep(1);
 }

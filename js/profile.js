@@ -64,43 +64,56 @@ function loadProfileTab(tab) {
         document.getElementById('historyCount').textContent = historyCars.length;
         
     } else if (tab === 'myads') {
-        // Пример моих объявлений (можно заменить на реальные данные)
         const myadsContainer = document.getElementById('myadsList');
         
-        // Для демонстрации покажем пример объявления
-        myadsContainer.innerHTML = `
-            <div class="myad-card">
-                <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop" alt="Audi A6" class="myad-image">
-                <div class="myad-info">
-                    <div class="myad-title">Audi A6 2020</div>
-                    <div class="myad-status">
-                        <i class="fa-regular fa-circle-check status-active"></i> Активно
-                        <span style="margin: 0 0.5rem;">•</span>
-                        <i class="fa-regular fa-eye"></i> 45 просмотров
+        if (userListings.length === 0) {
+            myadsContainer.innerHTML = `
+                <div class="profile-empty">
+                    <i class="fa-regular fa-rectangle-ad"></i>
+                    <p>У вас пока нет объявлений</p>
+                    <button class="btn btn-primary" onclick="showPage('addListing')">
+                        <i class="fa-regular fa-plus"></i> Подать объявление
+                    </button>
+                </div>
+            `;
+        } else {
+            let html = '';
+            userListings.forEach(listing => {
+                const statusClass = listing.status === 'active' ? 'status-active' : 
+                                listing.status === 'pending' ? 'status-pending' : 'status-sold';
+                const statusText = listing.status === 'active' ? 'Активно' :
+                                listing.status === 'pending' ? 'На модерации' : 'Продано';
+                
+                html += `
+                    <div class="myad-card">
+                        <img src="${listing.mainPhoto}" alt="${listing.make} ${listing.model}" class="myad-image">
+                        <div class="myad-info">
+                            <div class="myad-title">${listing.make} ${listing.model} ${listing.year}</div>
+                            <div class="myad-status">
+                                <i class="fa-regular fa-circle-check ${statusClass}"></i> ${statusText}
+                                <span style="margin: 0 0.5rem;">•</span>
+                                <i class="fa-regular fa-eye"></i> ${listing.views || 0} просмотров
+                                <span style="margin: 0 0.5rem;">•</span>
+                                <i class="fa-regular fa-calendar"></i> ${listing.date}
+                            </div>
+                        </div>
+                        <div class="myad-actions">
+                            <button class="myad-btn" onclick="alert('Редактирование (демо)')">
+                                <i class="fa-regular fa-pen-to-square"></i> Редактировать
+                            </button>
+                            ${listing.status === 'active' ? `
+                            <button class="myad-btn" onclick="alert('Продление (демо)')">
+                                <i class="fa-regular fa-circle-check"></i> Продлить
+                            </button>
+                            ` : ''}
+                        </div>
                     </div>
-                </div>
-                <div class="myad-actions">
-                    <button class="myad-btn"><i class="fa-regular fa-pen-to-square"></i> Редактировать</button>
-                    <button class="myad-btn"><i class="fa-regular fa-circle-check"></i> Продлить</button>
-                </div>
-            </div>
-            <div class="myad-card">
-                <img src="https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=400&h=300&fit=crop" alt="BMW X5" class="myad-image">
-                <div class="myad-info">
-                    <div class="myad-title">BMW X5 2019</div>
-                    <div class="myad-status">
-                        <i class="fa-regular fa-clock status-pending"></i> На модерации
-                        <span style="margin: 0 0.5rem;">•</span>
-                        <i class="fa-regular fa-eye"></i> 0 просмотров
-                    </div>
-                </div>
-                <div class="myad-actions">
-                    <button class="myad-btn"><i class="fa-regular fa-pen-to-square"></i> Редактировать</button>
-                </div>
-            </div>
-        `;
+                `;
+            });
+            myadsContainer.innerHTML = html;
+        }
         
-        document.getElementById('myadsCount').textContent = 2;
+        document.getElementById('myadsCount').textContent = userListings.length;
         
     } else if (tab === 'settings') {
         // Настройки уже есть в HTML, ничего не делаем
