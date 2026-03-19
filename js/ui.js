@@ -304,19 +304,56 @@ function renderCompare() {
     });
 }
 
-// Рендер журнала (карточки)
+// Рендер журнала (УЛУЧШЕННАЯ ВЕРСИЯ С КРАСИВЫМИ КАРТОЧКАМИ)
 function renderJournal() {
     const container = document.getElementById('articlesContainer');
-    container.className = 'articles-grid'; // меняем класс для сетки
-    container.innerHTML = articles.map(a => `
+    
+    // Красивые изображения для статей (разные для каждой)
+    const articleImages = [
+        'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&h=400&fit=crop', // выбор авто
+        'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&h=400&fit=crop', // красное авто
+        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=400&fit=crop', // мерседес
+        'https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=600&h=400&fit=crop', // BMW
+        'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop', // Volkswagen
+        'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600&h=400&fit=crop'  // Mercedes
+    ];
+    
+    // Расширяем данные статей
+    const enhancedArticles = articles.map((a, index) => ({
+        ...a,
+        image: articleImages[index % articleImages.length],
+        readTime: Math.floor(Math.random() * 5) + 3, // 3-7 минут
+        views: Math.floor(Math.random() * 1000) + 500,
+        comments: Math.floor(Math.random() * 30) + 5
+    }));
+    
+    // Создаём HTML для карточек
+    container.className = 'articles-grid';
+    container.innerHTML = enhancedArticles.map(a => `
         <div class="article-card" data-id="${a.id}">
-            <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-${150000 + a.id * 100}?w=400&h=300&fit=crop');"></div>
-            <div class="article-info">
-                <h3>${a.title}</h3>
-                <div class="article-date">
+            <div class="article-image">
+                <img src="${a.image}" alt="${a.title}" style="width:100%; height:100%; object-fit:cover;">
+                <div class="article-date-badge">
                     <i class="fa-regular fa-calendar"></i> ${a.date}
                 </div>
+            </div>
+            <div class="article-info">
+                <div class="article-meta">
+                    <span><i class="fa-regular fa-clock"></i> ${a.readTime} мин</span>
+                    <span><i class="fa-regular fa-eye"></i> ${a.views}</span>
+                    <span><i class="fa-regular fa-message"></i> ${a.comments}</span>
+                </div>
+                <h3>${a.title}</h3>
                 <p class="article-preview">${a.preview}</p>
+                <div class="article-footer">
+                    <span class="article-read-more">
+                        Читать далее <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                    <div class="article-stats">
+                        <span><i class="fa-regular fa-bookmark"></i></span>
+                        <span><i class="fa-regular fa-share-from-square"></i></span>
+                    </div>
+                </div>
             </div>
         </div>
     `).join('');
