@@ -762,15 +762,14 @@ function updatePhotoPreview() {
 
 // Отправка формы
 function submitListingForm() {
-    if (!validateStep(4)) return;
+    console.log('Отправка формы...');
     
+    // Проверяем цену
     const priceInput = document.getElementById('listingPrice');
     if (!priceInput) {
         console.error('Элемент listingPrice не найден');
         return;
     }
-    
-    if (!validateStep(4)) return;
     
     const price = priceInput.value;
     if (!price || price < 100) {
@@ -783,7 +782,7 @@ function submitListingForm() {
         category: selectedCategory,
         make: document.getElementById('listingMake').value,
         model: document.getElementById('listingModel').value,
-        year: parseInt(document.getElementById('listingYear').value),
+        year: parseInt(document.getElementById('listingYear').value) || 2020,
         body: document.getElementById('listingBody').value,
         engine: parseFloat(document.getElementById('listingEngine').value) || 2.0,
         transmission: document.getElementById('listingTransmission').value,
@@ -802,7 +801,9 @@ function submitListingForm() {
         mainPhoto: listingPhotos[0]?.data || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop'
     };
     
-    // Добавляем в массив объявлений
+    console.log('Данные для отправки:', listingData);
+    
+    // Добавляем в массив объявлений и каталог
     const newListing = addListing(listingData);
     
     // Показываем сообщение об успехе
@@ -810,6 +811,11 @@ function submitListingForm() {
     
     // Сбрасываем форму
     resetListingForm();
+    
+    // Обновляем каталог, если мы на нем находимся
+    if (document.getElementById('catalog').classList.contains('active')) {
+        applyCatalogFilters();
+    }
     
     // Переходим в личный кабинет
     showPage('profile');
@@ -821,30 +827,46 @@ function resetListingForm() {
     listingPhotos = [];
     selectedCategory = 'car';
     
-    document.getElementById('listingMake').value = '';
-    document.getElementById('listingModel').value = '';
-    document.getElementById('listingYear').value = '2020';
-    document.getElementById('listingBody').value = 'sedan';
-    document.getElementById('listingEngine').value = '2.0';
-    document.getElementById('listingTransmission').value = 'auto';
-    document.getElementById('listingMileage').value = '50000';
-    document.getElementById('listingColor').value = '';
-    document.getElementById('listingPrice').value = '';
-    document.getElementById('listingDescription').value = '';
-    document.getElementById('listingSellerName').value = 'Герман Т.В.';
-    document.getElementById('listingPhone').value = '+375 (29) 123-45-67';
+    const makeInput = document.getElementById('listingMake');
+    const modelInput = document.getElementById('listingModel');
+    const yearInput = document.getElementById('listingYear');
+    const bodySelect = document.getElementById('listingBody');
+    const engineInput = document.getElementById('listingEngine');
+    const transmissionSelect = document.getElementById('listingTransmission');
+    const mileageInput = document.getElementById('listingMileage');
+    const colorInput = document.getElementById('listingColor');
+    const priceInput = document.getElementById('listingPrice');
+    const descInput = document.getElementById('listingDescription');
+    const sellerInput = document.getElementById('listingSellerName');
+    const phoneInput = document.getElementById('listingPhone');
     
+    if (makeInput) makeInput.value = '';
+    if (modelInput) modelInput.value = '';
+    if (yearInput) yearInput.value = '2020';
+    if (bodySelect) bodySelect.value = 'sedan';
+    if (engineInput) engineInput.value = '2.0';
+    if (transmissionSelect) transmissionSelect.value = 'auto';
+    if (mileageInput) mileageInput.value = '50000';
+    if (colorInput) colorInput.value = '';
+    if (priceInput) priceInput.value = '';
+    if (descInput) descInput.value = '';
+    if (sellerInput) sellerInput.value = 'Герман Т.В.';
+    if (phoneInput) phoneInput.value = '+375 (29) 123-45-67';
+    
+    // Сбрасываем выбор категории
     document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
     const defaultCategory = document.querySelector('.category-option[data-category="car"]');
     if (defaultCategory) defaultCategory.classList.add('selected');
     
+    // Обновляем превью фото
     updatePhotoPreview();
     
-    // Деактивируем кнопку "Далее" на шаге 3
+    // Деактивируем кнопку на шаге 3
     const continueBtn = document.getElementById('continueToStep4');
     if (continueBtn) {
         continueBtn.disabled = true;
     }
     
+    // Возвращаемся на первый шаг
     goToStep(1);
 }

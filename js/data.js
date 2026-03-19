@@ -1,5 +1,5 @@
-// Данные автомобилей
-const cars = [
+// Данные автомобилей (ОСНОВНОЙ КАТАЛОГ) - делаем изменяемым, поэтому let вместо const
+let cars = [
     { id: 1, make: 'Audi', model: 'A6', year: 2020, price: 25000, body: 'sedan', transmission: 'auto', engine: '2.0', mileage: 45000, color: 'черный', image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop', isPremium: true },
     { id: 2, make: 'BMW', model: 'X5', year: 2019, price: 32000, body: 'suv', transmission: 'auto', engine: '3.0', mileage: 60000, color: 'синий', image: 'https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=400&h=300&fit=crop', isPremium: false },
     { id: 3, make: 'Volkswagen', model: 'Passat', year: 2018, price: 15000, body: 'sedan', transmission: 'manual', engine: '1.8', mileage: 80000, color: 'серебристый', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop', isPremium: false },
@@ -49,6 +49,54 @@ function addToHistory(carId) {
     }
 }
 
+// ========== НОВЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С КАТАЛОГОМ ==========
+
+// При загрузке страницы восстанавливаем каталог из localStorage (если есть)
+const savedCars = localStorage.getItem('carsCatalog');
+if (savedCars) {
+    try {
+        const parsed = JSON.parse(savedCars);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+            cars = parsed;
+        }
+    } catch (e) {
+        console.error('Ошибка загрузки сохраненного каталога', e);
+    }
+}
+
+// Функция для получения следующего доступного ID
+function getNextCarId() {
+    if (cars.length === 0) return 1;
+    const maxId = Math.max(...cars.map(c => c.id));
+    return maxId + 1;
+}
+
+// Функция для добавления нового автомобиля в каталог
+function addCarToListing(carData) {
+    const newCar = {
+        id: getNextCarId(),
+        make: carData.make,
+        model: carData.model,
+        year: carData.year,
+        price: carData.price,
+        body: carData.body || 'sedan',
+        transmission: carData.transmission || 'auto',
+        engine: carData.engine || '2.0',
+        mileage: carData.mileage || 0,
+        color: carData.color || 'не указан',
+        image: carData.mainPhoto || 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=300&fit=crop',
+        isPremium: false, // Новые объявления не премиум
+        isUserListing: true // Отметка, что это объявление пользователя
+    };
+    
+    cars.push(newCar);
+    
+    // Сохраняем обновленный каталог в localStorage
+    localStorage.setItem('carsCatalog', JSON.stringify(cars));
+    
+    return newCar;
+}
+
 // Массив для хранения объявлений пользователя
 let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
 
@@ -57,16 +105,28 @@ function saveListings() {
     localStorage.setItem('userListings', JSON.stringify(userListings));
 }
 
-// Функция добавления нового объявления
+// Функция добавления нового объявления (ОБНОВЛЕННАЯ)
 function addListing(listingData) {
+    console.log('Добавление нового объявления:', listingData);
+    
+    // Сначала добавляем в каталог
+    const newCar = addCarToListing(listingData);
+    
+    // Затем создаем запись в личных объявлениях
     const newListing = {
-        id: Date.now(), // уникальный ID на основе времени
+        id: newCar.id, // Используем тот же ID, что и в каталоге
         ...listingData,
+        carId: newCar.id,
         date: new Date().toLocaleDateString('ru-RU'),
         status: 'active',
         views: 0
     };
+    
     userListings.unshift(newListing);
     saveListings();
+    
+    console.log('Объявление добавлено, новый ID:', newCar.id);
+    console.log('Всего автомобилей в каталоге:', cars.length);
+    
     return newListing;
 }
