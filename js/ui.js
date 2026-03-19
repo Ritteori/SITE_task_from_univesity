@@ -434,11 +434,21 @@ function initCalculator() {
 let listingPhotos = [];
 let selectedCategory = 'car';
 
-// Инициализация формы подачи объявления
+// Инициализация формы подачи объявления (ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ)
 function initListingForm() {
     console.log('Инициализация формы подачи объявления');
     
+    // СБРАСЫВАЕМ ВСЕ СОСТОЯНИЕ ПРИ ИНИЦИАЛИЗАЦИИ
+    listingPhotos = [];
+    selectedCategory = 'car';
+    
     // Выбор категории
+    document.querySelectorAll('.category-option').forEach(opt => {
+        // Удаляем старые обработчики, чтобы не было дублирования
+        opt.replaceWith(opt.cloneNode(true));
+    });
+    
+    // Заново добавляем обработчики
     document.querySelectorAll('.category-option').forEach(opt => {
         opt.addEventListener('click', function() {
             document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
@@ -448,8 +458,20 @@ function initListingForm() {
         });
     });
     
-    // Навигация по шагам (кнопки "Далее") - ИСКЛЮЧАЕМ continueToStep4
-    document.querySelectorAll('.next-step:not(#continueToStep4)').forEach(btn => {
+    // Устанавливаем начальную выбранную категорию
+    const defaultCategory = document.querySelector('.category-option[data-category="car"]');
+    if (defaultCategory) {
+        defaultCategory.classList.add('selected');
+    }
+    
+    // Навигация по шагам (кнопки "Далее") - ВАЖНО: очищаем и добавляем заново
+    document.querySelectorAll('.next-step').forEach(btn => {
+        // Удаляем старые обработчики
+        btn.replaceWith(btn.cloneNode(true));
+    });
+    
+    // Заново добавляем обработчики для кнопок "Далее"
+    document.querySelectorAll('.next-step').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const nextStep = parseInt(this.dataset.next);
@@ -457,29 +479,49 @@ function initListingForm() {
             
             // Определяем текущий шаг (предыдущий)
             const currentStep = nextStep - 1;
+            console.log('Текущий шаг для валидации:', currentStep);
             
             if (validateStep(currentStep)) {
+                console.log('Валидация успешна, переходим на шаг:', nextStep);
                 goToStep(nextStep);
+            } else {
+                console.log('Валидация не пройдена');
             }
         });
     });
     
-    // Специальный обработчик для кнопки continueToStep4
+    // Специальный обработчик для кнопки на шаге 3 (переход на шаг 4)
     const continueBtn = document.getElementById('continueToStep4');
     if (continueBtn) {
-        continueBtn.addEventListener('click', function(e) {
+        // Удаляем предыдущие обработчики
+        const newBtn = continueBtn.cloneNode(true);
+        continueBtn.parentNode.replaceChild(newBtn, continueBtn);
+        
+        newBtn.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Клик по специальной кнопке continueToStep4');
             
             if (validateStep(3)) { // Валидация шага 3
+                console.log('Валидация шага 3 успешна, переходим на шаг 4');
                 goToStep(4); // Переход на шаг 4
+            } else {
+                console.log('Валидация шага 3 не пройдена');
             }
         });
+        
+        // Изначально кнопка отключена (нет фото)
+        newBtn.disabled = true;
+        console.log('Кнопка continueToStep4 инициализирована и отключена');
     } else {
         console.error('Кнопка continueToStep4 не найдена при инициализации');
     }
     
     // Навигация по шагам (кнопки "Назад")
+    document.querySelectorAll('.prev-step').forEach(btn => {
+        // Удаляем старые обработчики
+        btn.replaceWith(btn.cloneNode(true));
+    });
+    
     document.querySelectorAll('.prev-step').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -494,27 +536,39 @@ function initListingForm() {
     const fileInput = document.getElementById('fileInput');
     
     if (dropZone && fileInput) {
-        dropZone.addEventListener('click', () => fileInput.click());
+        // Удаляем старые обработчики
+        const newDropZone = dropZone.cloneNode(true);
+        dropZone.parentNode.replaceChild(newDropZone, dropZone);
         
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = 'var(--primary)';
-            dropZone.style.background = 'rgba(0,103,99,0.02)';
+        const newFileInput = fileInput.cloneNode(true);
+        fileInput.parentNode.replaceChild(newFileInput, fileInput);
+        
+        // Заново добавляем обработчики
+        document.getElementById('dropZone').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
         });
         
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = '#cbd5d5';
-            dropZone.style.background = 'transparent';
+        document.getElementById('dropZone').addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.currentTarget.style.borderColor = 'var(--primary)';
+            e.currentTarget.style.background = 'rgba(0,103,99,0.02)';
         });
         
-        dropZone.addEventListener('drop', (e) => {
+        document.getElementById('dropZone').addEventListener('dragleave', (e) => {
+            e.currentTarget.style.borderColor = '#cbd5d5';
+            e.currentTarget.style.background = 'transparent';
+        });
+        
+        document.getElementById('dropZone').addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = '#cbd5d5';
-            dropZone.style.background = 'transparent';
+            e.currentTarget.style.borderColor = '#cbd5d5';
+            e.currentTarget.style.background = 'transparent';
             handleFiles(e.dataTransfer.files);
         });
         
-        fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
     } else {
         console.error('Элементы загрузки фото не найдены');
     }
@@ -522,16 +576,17 @@ function initListingForm() {
     // Отправка формы
     const submitBtn = document.getElementById('submitListing');
     if (submitBtn) {
-        submitBtn.addEventListener('click', submitListingForm);
+        // Удаляем старые обработчики
+        const newSubmitBtn = submitBtn.cloneNode(true);
+        submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+        
+        document.getElementById('submitListing').addEventListener('click', submitListingForm);
     } else {
         console.error('Кнопка submitListing не найдена');
     }
     
-    // Убеждаемся, что кнопка на шаге 3 правильно инициализирована
-    if (continueBtn) {
-        continueBtn.disabled = true;
-        console.log('Кнопка continueToStep4 инициализирована и отключена');
-    }
+    // Сбрасываем форму на первый шаг
+    goToStep(1);
 }
 
 // Переход между шагами
@@ -545,15 +600,21 @@ function goToStep(step) {
     }
     
     // Скрываем все шаги
-    document.querySelectorAll('.step-content').forEach(s => s.style.display = 'none');
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.step-content').forEach(s => {
+        s.style.display = 'none';
+    });
+    
+    document.querySelectorAll('.step').forEach(s => {
+        s.classList.remove('active');
+    });
     
     // Показываем нужный шаг
     const targetStep = document.getElementById(`step${step}`);
     if (targetStep) {
         targetStep.style.display = 'block';
+        console.log(`Шаг ${step} отображен`);
     } else {
-        console.error(`Шаг ${step} не найден`);
+        console.error(`Шаг ${step} не найден в DOM`);
         return;
     }
     
@@ -561,6 +622,8 @@ function goToStep(step) {
     const stepIndicator = document.querySelector(`.step[data-step="${step}"]`);
     if (stepIndicator) {
         stepIndicator.classList.add('active');
+    } else {
+        console.error(`Индикатор шага ${step} не найден`);
     }
     
     // Прокрутка вверх
@@ -571,9 +634,7 @@ function goToStep(step) {
         const continueBtn = document.getElementById('continueToStep4');
         if (continueBtn) {
             continueBtn.disabled = listingPhotos.length === 0;
-            console.log('Кнопка continueToStep4:', continueBtn.disabled ? 'отключена' : 'включена');
-        } else {
-            console.error('Кнопка continueToStep4 не найдена на шаге 3');
+            console.log('Кнопка continueToStep4 на шаге 3:', continueBtn.disabled ? 'отключена' : 'включена');
         }
     }
 }
@@ -596,6 +657,13 @@ function validateStep(step) {
         case 3: // Шаг 3 - фото
             if (listingPhotos.length === 0) {
                 alert('Добавьте хотя бы одно фото');
+                return false;
+            }
+            return true;
+        case 4: // Шаг 4 - цена
+            const price = document.getElementById('listingPrice').value;
+            if (!price || price < 100) {
+                alert('Укажите корректную цену (мин. $100)');
                 return false;
             }
             return true;
