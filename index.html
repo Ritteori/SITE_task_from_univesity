@@ -547,12 +547,187 @@
 
         <!-- Контакты -->
         <section id="contacts" class="page">
-            <h1>Контакты</h1>
-            <p>Email: shift_by@gmail.ru</   p>
-            <p>Telegram: <a href="https://t.me/shift_by" target="_blank">@shift_by</a></p>
-            <p>Instagram: @shift.by</p>
-            <p>Адрес: г. Минск, ул. Интернет-маркетинга, д. 1</p>
-            <iframe src="https://maps.google.com/maps?q=Minsk&output=embed" width="100%" height="300" style="border:0; margin-top:1rem;"></iframe>
+            <h1><i class="fa-solid fa-address-card" style="color: var(--primary);"></i> Контакты</h1>
+            
+            <!-- Контактная информация в карточках -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                
+                <!-- Карточка email -->
+                <div style="background: white; border-radius: var(--border-radius); padding: 2rem; text-align: center; box-shadow: var(--shadow); transition: transform 0.2s;" 
+                    onmouseover="this.style.transform='translateY(-5px)'" 
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width: 60px; height: 60px; background: rgba(0,103,99,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fa-regular fa-envelope" style="font-size: 2rem; color: var(--primary);"></i>
+                    </div>
+                    <h3 style="margin-bottom: 0.5rem;">Email</h3>
+                    <p style="color: #4a5a5a; margin-bottom: 1rem;">Напишите нам на почту</p>
+                    <a href="mailto:shift_by@gmail.ru" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 1.1rem;">shift_by@gmail.ru</a>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #6f8a8a;">
+                        <i class="fa-regular fa-clock"></i> Ответ в течение 24 часов
+                    </div>
+                </div>
+                
+                <!-- Карточка Telegram -->
+                <div style="background: white; border-radius: var(--border-radius); padding: 2rem; text-align: center; box-shadow: var(--shadow); transition: transform 0.2s;"
+                    onmouseover="this.style.transform='translateY(-5px)'" 
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width: 60px; height: 60px; background: rgba(0,136,204,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fa-brands fa-telegram" style="font-size: 2rem; color: #0088cc;"></i>
+                    </div>
+                    <h3 style="margin-bottom: 0.5rem;">Telegram</h3>
+                    <p style="color: #4a5a5a; margin-bottom: 1rem;">Быстрая связь в мессенджере</p>
+                    <a href="https://t.me/shift_by" target="_blank" style="color: #0088cc; font-weight: 600; text-decoration: none; font-size: 1.1rem;">@shift_by</a>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: #e8f5e9; color: #2e7d32; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.85rem;">
+                            <i class="fa-regular fa-circle-check"></i> Онлайн 24/7
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Карточка Instagram -->
+                <div style="background: white; border-radius: var(--border-radius); padding: 2rem; text-align: center; box-shadow: var(--shadow); transition: transform 0.2s;"
+                    onmouseover="this.style.transform='translateY(-5px)'" 
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); opacity: 0.1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fa-brands fa-instagram" style="font-size: 2rem; color: #d62976;"></i>
+                    </div>
+                    <h3 style="margin-bottom: 0.5rem;">Instagram</h3>
+                    <p style="color: #4a5a5a; margin-bottom: 1rem;">Новости и обновления</p>
+                    <a href="https://instagram.com/shift.by" target="_blank" style="color: #d62976; font-weight: 600; text-decoration: none; font-size: 1.1rem;">@shift.by</a>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #6f8a8a;">
+                        <i class="fa-regular fa-images"></i> 500+ публикаций
+                    </div>
+                </div>
+                
+                <!-- Карточка адреса -->
+                <div style="background: white; border-radius: var(--border-radius); padding: 2rem; text-align: center; box-shadow: var(--shadow); transition: transform 0.2s;"
+                    onmouseover="this.style.transform='translateY(-5px)'" 
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width: 60px; height: 60px; background: rgba(0,103,99,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fa-solid fa-location-dot" style="font-size: 2rem; color: var(--primary);"></i>
+                    </div>
+                    <h3 style="margin-bottom: 0.5rem;">Офис</h3>
+                    <p style="color: #4a5a5a; margin-bottom: 1rem;">Центральный офис в Минске</p>
+                    <p style="font-weight: 600; color: var(--text-dark);">ул. Интернет-маркетинга, д. 1</p>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #6f8a8a;">
+                        <i class="fa-regular fa-clock"></i> Пн-Пт: 9:00 - 18:00
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Форма обратной связи -->
+            <div style="background: white; border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--shadow); margin: 2rem 0;">
+                <h2 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-regular fa-message" style="color: var(--primary);"></i>
+                    Напишите нам
+                </h2>
+                
+                <form id="contactForm" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <div style="grid-column: span 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Ваше имя</label>
+                            <input type="text" placeholder="Иван Иванов" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e7e7; border-radius: 10px; font-size: 1rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email</label>
+                            <input type="email" placeholder="ivan@example.com" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e7e7; border-radius: 10px; font-size: 1rem;">
+                        </div>
+                    </div>
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Тема</label>
+                        <select style="width: 100%; padding: 0.8rem; border: 2px solid #e0e7e7; border-radius: 10px; font-size: 1rem;">
+                            <option>Общий вопрос</option>
+                            <option>Сотрудничество</option>
+                            <option>Техническая поддержка</option>
+                            <option>Реклама на сайте</option>
+                            <option>Другое</option>
+                        </select>
+                    </div>
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Сообщение</label>
+                        <textarea rows="5" placeholder="Ваше сообщение..." style="width: 100%; padding: 0.8rem; border: 2px solid #e0e7e7; border-radius: 10px; font-size: 1rem; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div style="grid-column: span 2; display: flex; gap: 1rem; align-items: center;">
+                        <button type="button" class="btn btn-primary" onclick="alert('Спасибо за сообщение! Мы ответим вам в ближайшее время. (Демо-режим)')">
+                            <i class="fa-regular fa-paper-plane"></i> Отправить сообщение
+                        </button>
+                        <span style="color: #6f8a8a; font-size: 0.9rem;">
+                            <i class="fa-regular fa-lock"></i> Мы не передаём данные третьим лицам
+                        </span>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Карта и дополнительная информация -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                <!-- Карта -->
+                <div style="background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow);">
+                    <iframe src="https://maps.google.com/maps?q=Minsk&output=embed" width="100%" height="300" style="border:0; display: block;"></iframe>
+                </div>
+                
+                <!-- Дополнительная информация -->
+                <div style="background: white; border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-regular fa-building" style="color: var(--primary);"></i>
+                        О компании
+                    </h3>
+                    <p style="color: #4a5a5a; margin-bottom: 1rem; line-height: 1.6;">
+                        Shift.by — это современная онлайн-площадка для продажи автомобилей в Беларуси. Мы работаем с 2023 года и помогаем людям безопасно покупать и продавать автомобили.
+                    </p>
+                    
+                    <div style="margin: 1rem 0; padding: 1rem 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                            <i class="fa-regular fa-registered" style="color: var(--primary);"></i>
+                            <span>УНП: 123456789</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                            <i class="fa-regular fa-calendar" style="color: var(--primary);"></i>
+                            <span>Зарегистрированы: 15.02.2023</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i class="fa-regular fa-file-lines" style="color: var(--primary);"></i>
+                            <span>Лицензия МАРТ №12345</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <a href="#" class="btn btn-outline" style="flex: 1; text-align: center;" onclick="alert('Скачать реквизиты (демо)')">
+                            <i class="fa-regular fa-file-pdf"></i> Реквизиты
+                        </a>
+                        <a href="#" class="btn btn-outline" style="flex: 1; text-align: center;" onclick="alert('Политика конфиденциальности (демо)')">
+                            <i class="fa-regular fa-shield"></i> Политика
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Рейтинг и отзывы (заглушка) -->
+            <div style="background: white; border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow); margin-top: 2rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 2rem;">
+                        <div>
+                            <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">4.8</div>
+                            <div style="color: #6f8a8a;">Средняя оценка</div>
+                        </div>
+                        <div>
+                            <div style="display: flex; gap: 0.2rem; font-size: 1.2rem;">
+                                <i class="fa-solid fa-star" style="color: #ffc107;"></i>
+                                <i class="fa-solid fa-star" style="color: #ffc107;"></i>
+                                <i class="fa-solid fa-star" style="color: #ffc107;"></i>
+                                <i class="fa-solid fa-star" style="color: #ffc107;"></i>
+                                <i class="fa-solid fa-star-half-alt" style="color: #ffc107;"></i>
+                            </div>
+                            <div style="color: #6f8a8a;">156 отзывов</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" onclick="alert('Оставить отзыв (демо)')">
+                        <i class="fa-regular fa-star"></i> Оставить отзыв
+                    </button>
+                </div>
+            </div>
         </section>
     </div>
 
